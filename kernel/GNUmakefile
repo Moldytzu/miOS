@@ -1,39 +1,28 @@
-# This is the name that our final kernel executable will have.
-# Change as needed.
-override KERNEL := kernel.elf
+BINDIR := ../bin
+OBJDIR := obj
 
-# Convenience macro to reliably declare overridable command variables.
-define DEFAULT_VAR =
-    ifeq ($(origin $1),default)
-        override $(1) := $(2)
-    endif
-    ifeq ($(origin $1),undefined)
-        override $(1) := $(2)
-    endif
-endef
+KERNEL := $(BINDIR)/kernel.elf
 
-# It is highly recommended to use a custom built cross toolchain to build a kernel.
-# We are only using "cc" as a placeholder here. It may work by using
-# the host system's toolchain, but this is not guaranteed.
-$(eval $(call DEFAULT_VAR,CC,cc))
+# use default c compiler (todo: use a cross compiler)
+CC := cc
 
-# Same thing for "ld" (the linker).
-$(eval $(call DEFAULT_VAR,LD,ld))
+# use default nasm (todo: use a cross compiler)
+LD := ld
+
+# use nasm
+ASM := nasm
 
 # User controllable CFLAGS.
-CFLAGS ?= -g -O2 -pipe -Wall -Wextra
+CFLAGS ?= -O2 -g
 
-# User controllable preprocessor flags. We set none by default.
-CPPFLAGS ?=
-
-# User controllable nasm flags.
-NASMFLAGS ?= -F dwarf -g
-
-# User controllable linker flags. We set none by default.
+# User controllable LDFLAGS
 LDFLAGS ?=
 
+# User controllable ASMFLAGS
+ASMFLAGS ?=
+
 # Internal C flags that should not be changed by the user.
-override CFLAGS +=       \
+INTERNALCFLAGS :=        \
     -std=c11             \
     -ffreestanding       \
     -fno-stack-protector \
@@ -54,28 +43,23 @@ override CFLAGS +=       \
     -I.
 
 # Internal linker flags that should not be changed by the user.
-override LDFLAGS +=         \
-    -nostdlib               \
-    -static                 \
-    -m elf_x86_64           \
-    -z max-page-size=0x1000 \
-    -T linker.ld
+INTERNALLDFLAGS :=         \
+	-T../linker.ld         \
+	-nostdlib              \
+	-zmax-page-size=0x1000 \
+	-static
 
-# Check if the linker supports -no-pie and enable it if it does
-ifeq ($(shell $(LD) --help 2>&1 | grep 'no-pie' >/dev/null 2>&1; echo $$?),0)
-    override LDFLAGS += -no-pie
-endif
+# Internal ASM flags that should not be changed by the user.
+INTERNALASMFLAGS := \
+	-felf64
 
-# Internal nasm flags that should not be changed by the user.
-override NASMFLAGS += \
-    -f elf64
-
-# Use find to glob all *.c, *.S, and *.asm files in the directory and extract the object names.
-override CFILES := $(shell find . -type f -name '*.c')
-override ASFILES := $(shell find . -type f -name '*.S')
-override NASMFILES := $(shell find . -type f -name '*.asm')
-override OBJ := $(CFILES:.c=.o) $(ASFILES:.S=.o) $(NASMFILES:.asm=.o)
-override HEADER_DEPS := $(CFILES:.c=.d) $(ASFILES:.S=.d)
+# Use find to glob all *.c files in the directory and extract the object names.
+CFILES := $(shell find . -type f -name '*.c')
+ASMFILES := $(shell find . -type f -name '*.asm')
+OBJ := $(CFILES:.c=.o)
+OBJ += $(ASMFILES:.asm=.o)
+HEADER_DEPS := $(CFILES:.c=.d)
+HEADER_DEPS += $(ASMFILES:.asm=.d)
 
 # Default target.
 .PHONY: all
@@ -86,28 +70,24 @@ limine.h:
 
 # Link rules for the final kernel executable.
 $(KERNEL): $(OBJ)
-	$(LD) $(OBJ) $(LDFLAGS) -o $@
-
-# Include header dependencies.
--include $(HEADER_DEPS)
+	cd obj && $(LD) $(OBJ) $(LDFLAGS) $(INTERNALLDFLAGS) -o ../$@
 
 # Compilation rules for *.c files.
+-include $(HEADER_DEPS)
 %.o: %.c limine.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@ mkdir -p $(dir $(OBJDIR)/$@)
+	$(CC) $(CFLAGS) $(INTERNALCFLAGS) -c $< -o $(OBJDIR)/$@
 
-# Compilation rules for *.S files.
-%.o: %.S limine.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
-
-# Compilation rules for *.asm (nasm) files.
-%.o: %.asm
-	nasm $(NASMFLAGS) $< -o $@
+# Compilation rules for *.asm files.
+-include $(HEADER_DEPS)
+%.o: %.asm limine.h
+	@ mkdir -p $(dir $(OBJDIR)/$@)
+	$(ASM) $(ASMFLAGS) $(INTERNALASMFLAGS) $< -o $(OBJDIR)/$@
 
 # Remove object files and the final executable.
-.PHONY: clean
+.PHONY: clean distclean
 clean:
-	rm -rf $(KERNEL) $(OBJ) $(HEADER_DEPS)
+	rm -rf $(KERNEL) $(OBJDIR)
 
-.PHONY: distclean
-distclean: clean
-	rm -f limine.h
+distclean:
+	rm -rf limine.h

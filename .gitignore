@@ -6,3 +6,5 @@ kernel/limine.h
 *.hdd
 *.o
 *.d
+bin
+obj
