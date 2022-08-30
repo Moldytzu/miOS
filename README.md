@@ -1,11 +1,11 @@
 # Codename: miOS
 
 ### Milestones:
-##### [] Hello World:
+##### [x] Hello World:
    	- configure project [x]
     - configure Limine [x]
     - use the terminal to display some text [x]
-    - enable simd []
+    - enable simd [x]
 ##### [] Userspace:
     - set up basic serial communication []
     - set up a GDT []

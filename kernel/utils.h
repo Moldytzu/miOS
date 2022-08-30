@@ -10,4 +10,4 @@
 
 // this file implements some of the basic libc libraries
 
-int strlen(char *str);
+int strlen(const char *str);
