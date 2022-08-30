@@ -3,6 +3,7 @@
 #include <simd/simd.h>
 #include <io/serial.h>
 #include <cpu/gdt.h>
+#include <mm/pmm.h>
 
 void _start(void)
 {
@@ -14,6 +15,8 @@ void _start(void)
     serialInit(); // initialise the serial port interface
 
     gdtInit(); // loads a new gdt
+
+    pmmInit(); // initialises the physical memory manager
 
     while (1)
         ;
