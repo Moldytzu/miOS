@@ -40,6 +40,7 @@ INTERNALCFLAGS :=        \
     -mno-red-zone        \
     -mcmodel=kernel      \
     -MMD                 \
+    -Wall                \
     -I.
 
 # Internal linker flags that should not be changed by the user.
