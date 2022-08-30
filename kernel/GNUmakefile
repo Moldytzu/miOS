@@ -1,13 +1,14 @@
 BINDIR := ../bin
 OBJDIR := obj
+CROSS_COMPILER := ${HOME}/cross_compiler/bin/x86_64-elf-
 
 KERNEL := $(BINDIR)/kernel.elf
 
-# use default c compiler (todo: use a cross compiler)
-CC := cc
+# use cross c compiler
+CC := $(CROSS_COMPILER)gcc
 
-# use default nasm (todo: use a cross compiler)
-LD := ld
+# use cross ld
+LD := $(CROSS_COMPILER)ld
 
 # use nasm
 ASM := nasm
@@ -22,23 +23,20 @@ LDFLAGS ?=
 ASMFLAGS ?=
 
 # Internal C flags that should not be changed by the user.
-INTERNALCFLAGS :=        \
-    -std=gnu11           \
-    -ffreestanding       \
-    -fno-stack-protector \
-    -fno-stack-check     \
-    -fno-lto             \
-    -fno-pie             \
-    -fno-pic             \
-    -m64                 \
-    -march=x86-64        \
-    -mabi=sysv           \
-    -mno-red-zone        \
-    -mcmodel=kernel      \
-    -MMD                 \
-    -Wall                \
-    -O2                  \
-    -I.
+INTERNALCFLAGS :=   		 \
+	-I.                  	 \
+	-std=gnu11           	 \
+	-ffreestanding       	 \
+	-fno-stack-protector 	 \
+	-fno-pic             	 \
+	-mabi=sysv           	 \
+	-mno-red-zone        	 \
+	-mcmodel=kernel      	 \
+	-Werror 			     \
+	-Wno-int-to-pointer-cast \
+	-msse                    \
+	-msse2                   \
+	-MMD
 
 # Internal linker flags that should not be changed by the user.
 INTERNALLDFLAGS :=         \

@@ -7,3 +7,10 @@ int strlen(const char *str) // calculate the lenght in bytes of a string
         ;
     return i;
 }
+
+void memset(void *dest, uint8_t data, size_t count) // sets the contents of the addresses in the range of [dest, dest + count] to the data argument
+{
+    uint8_t *destPtr = (uint8_t *)dest;
+    for(; count; count--)
+        *(destPtr++) = data;
+}

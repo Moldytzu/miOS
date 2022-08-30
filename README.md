@@ -1,5 +1,8 @@
 # Codename: miOS
 
+## Attention!
+This project depends on the cross-compiler built with the script from https://github.com/Moldytzu/cross-compiler-builder.
+
 ### Milestones:
 ##### [x] Hello World:
    	- configure project [x]
@@ -8,7 +11,7 @@
     - enable simd [x]
 ##### [] Userspace:
     - set up basic serial communication [x]
-    - set up a GDT []
+    - set up a GDT [x]
     - create a physical and virtual memory manager []
     - create a heap []
     - set up a TSS []

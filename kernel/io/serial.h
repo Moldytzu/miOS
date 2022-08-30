@@ -1,3 +1,4 @@
+#pragma once
 #include <io/ports.h>
 
 #define COM1 0x3F8

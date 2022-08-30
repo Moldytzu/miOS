@@ -2,6 +2,7 @@
 #include <boot/limine.h>
 #include <simd/simd.h>
 #include <io/serial.h>
+#include <cpu/gdt.h>
 
 void _start(void)
 {
@@ -11,6 +12,8 @@ void _start(void)
     limineWrite("miOS"); // write text
 
     serialInit(); // initialise the serial port interface
+
+    gdtInit(); // loads a new gdt
 
     while (1)
         ;

@@ -12,5 +12,9 @@
 
 #define iasm asm volatile
 #define ifunc __attribute__((always_inline)) inline static
+#define pstruct typedef struct __attribute__((packed))
+#define zero(ptr, type) memset(ptr, 0, sizeof(type))
 
 int strlen(const char *str);
+
+void memset(void *dest, uint8_t data, size_t count);
