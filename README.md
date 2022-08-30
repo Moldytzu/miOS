@@ -7,7 +7,7 @@
     - use the terminal to display some text [x]
     - enable simd [x]
 ##### [] Userspace:
-    - set up basic serial communication []
+    - set up basic serial communication [x]
     - set up a GDT []
     - create a physical and virtual memory manager []
     - create a heap []

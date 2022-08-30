@@ -23,7 +23,7 @@ ASMFLAGS ?=
 
 # Internal C flags that should not be changed by the user.
 INTERNALCFLAGS :=        \
-    -std=c11             \
+    -std=gnu11           \
     -ffreestanding       \
     -fno-stack-protector \
     -fno-stack-check     \
@@ -37,6 +37,7 @@ INTERNALCFLAGS :=        \
     -mcmodel=kernel      \
     -MMD                 \
     -Wall                \
+    -O2                  \
     -I.
 
 # Internal linker flags that should not be changed by the user.
