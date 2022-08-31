@@ -1,10 +1,11 @@
 #include <cpu/gdt.h>
 #include <io/serial.h>
+#include <mm/pmm.h>
 
 extern void gdtLoad(gdtr_t *);
 
-gdtr_t gdtr;                                          // descriptor
-gdt_segment_t segments[4096 / sizeof(gdt_segment_t)]; // 1024 segments (todo: switch this with an allocated page)
+gdtr_t gdtr;             // descriptor
+gdt_segment_t *segments; // pointer to the segments
 
 int lastSegment = 0;
 void gdtCreateSegment(uint8_t access)
@@ -19,6 +20,7 @@ void gdtCreateSegment(uint8_t access)
 void gdtInit()
 {
     memset(&gdtr, 0, sizeof(gdtr_t)); // clear the gdtr
+    segments = pmmAllocate();         // allocate the segments
 
     gdtCreateSegment(0);          // null segment
     gdtCreateSegment(0b10011110); // kernel code
