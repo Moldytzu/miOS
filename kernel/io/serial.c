@@ -34,5 +34,5 @@ void serialInit()
 
     // initialisation end
 
-    serialWrites("miOS initialised COM1!");
+    serialWrites("miOS initialised COM1!\n");
 }

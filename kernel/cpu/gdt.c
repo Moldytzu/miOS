@@ -1,4 +1,5 @@
 #include <cpu/gdt.h>
+#include <io/serial.h>
 
 extern void gdtLoad(gdtr_t *);
 
@@ -31,4 +32,6 @@ void gdtInit()
     gdtr.size = (lastSegment * sizeof(gdt_segment_t)) - 1; // set the size
 
     gdtLoad(&gdtr); // load the gdt
+
+    serialWrites("Loaded the GDT!\n");
 }

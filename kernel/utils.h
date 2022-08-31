@@ -14,7 +14,27 @@
 #define ifunc __attribute__((always_inline)) inline static
 #define pstruct typedef struct __attribute__((packed))
 #define zero(ptr, type) memset(ptr, 0, sizeof(type))
+#define align(val, alg) (max(val,alg) + (alg - (max(val,alg) % alg)))
+#define alignD(val, alg) (align(val, alg) - alg)
 
 int strlen(const char *str);
-
 void memset(void *dest, uint8_t data, size_t count);
+const char *to_string(uint64_t val);
+const char *to_hstring(uint64_t val);
+void strrev(char *str);
+
+ifunc int min(int a, int b)
+{
+    if (a > b)
+        return b;
+
+    return a;
+}
+
+ifunc int max(int a, int b)
+{
+    if (a > b)
+        return a;
+
+    return b;
+}
