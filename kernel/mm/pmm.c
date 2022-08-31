@@ -83,6 +83,32 @@ void *pmmAllocate()
     return NULL;
 }
 
+void pmmDeallocate(void *address)
+{
+    pmm_pool_t *pool = NULL;
+
+    for (int i = 0; i < poolsIndex; i++)
+    {
+        pool = &pools[i];
+
+        int pageIndex = 0;
+        for (int i = 0; i != pool->bitmapSize; i++) // iterate over all the bytes of the bitmap
+        {
+            uint8_t bitmapByte = *((uint8_t *)pool->base + i); // get the byte at the offset indicated by i
+            for (int j = 0; j < 8; j++, pageIndex++)           // iterate over all the bits of the byte
+            {
+                uint8_t mask = 0b10000000 >> j;
+                if (mask & bitmapByte && (void *)(pool->allocableBase + pageIndex * 4096) == address) // page at that index is not free
+                {
+                    *((uint8_t *)pool->base + i) &= ~(0b10000000 >> j); // mark the page as free
+                    pool->available += 4096;
+                    return;
+                }
+            }
+        }
+    }
+}
+
 void pmmInit()
 {
     memmap = limineGetMemmap(); // get the memory map
