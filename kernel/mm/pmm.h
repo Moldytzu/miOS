@@ -19,3 +19,5 @@ void *pmmAllocateLow(); // allocate in the lower memory part (< 1M)
 void *pmmAllocate();    // allocate in the higher memory part (> 1M)
 void pmmDeallocate(void *address);
 void pmmInit();
+uint64_t pmmGetAvailable();
+uint64_t pmmGetTotal();

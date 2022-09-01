@@ -21,6 +21,12 @@ void _start(void)
 
     vmmInit(); // create and load a page table
 
+    serialWrites("RAM usage: ");
+    serialWrites(to_string((pmmGetTotal() - pmmGetAvailable()) / 1024 / 1024));
+    serialWrites("/");
+    serialWrites(to_string(pmmGetTotal() / 1024 / 1024));
+    serialWrites(" MB\n");
+
     while (1)
         ;
 }

@@ -80,6 +80,8 @@ void *pmmAllocate()
         return pmmAllocate();
     }
 
+    serialWrites("Out of memory!");
+
     return NULL;
 }
 
@@ -107,6 +109,10 @@ void pmmDeallocate(void *address)
             }
         }
     }
+
+    serialWrites("Unaligned deallocation of 0x");
+    serialWrites(to_hstring((uint64_t)address));
+    serialWrites("\n");
 }
 
 void pmmInit()
@@ -156,4 +162,20 @@ void pmmInit()
         serialWrites(to_string(requiredBytes));
         serialWrites(" bytes to store the bitmap bytes\n");
     }
+}
+
+uint64_t pmmGetAvailable()
+{
+    uint64_t available = 0;
+    for(int i = 0; i < poolsIndex; i++)
+        available += pools[i].available;
+    return available;
+}
+
+uint64_t pmmGetTotal()
+{
+    uint64_t total = 0;
+    for(int i = 0; i < poolsIndex; i++)
+        total += pools[i].allocableSize;
+    return total;
 }

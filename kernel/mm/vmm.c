@@ -168,16 +168,19 @@ vmm_page_table_t *vmmCreateTable(bool full)
     // map the gdt as kernel rw
     vmmMap(newTable, gdtGetSegments(), gdtGetSegments(), false, true);
 
-    // map the kernel as kernel rw
-    for (size_t i = 0; i < ksize; i += 4096)
-        vmmMap(newTable, (void *)(kaddr->virtual_base + i), (void *)(kaddr->physical_base + i), false, true);
-
     // map memory map entries as kernel rw
     for (size_t i = 0; i < memMap->entry_count; i++)
     {
         struct limine_memmap_entry *entry = memMap->entries[i];
         if (entry->type == LIMINE_MEMMAP_USABLE && !full) // don't map the usable memory in non-full page tables
             continue;
+
+        if (entry->type == LIMINE_MEMMAP_KERNEL_AND_MODULES)
+        {
+            for (size_t i = 0; i < entry->length; i += 4096) // map the kernel
+                vmmMap(newTable, (void *)(kaddr->virtual_base + i), (void *)(kaddr->physical_base + i), false, true);
+            continue;
+        }
 
         for (size_t i = 0; i < entry->length; i += 4096)
         {
