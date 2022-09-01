@@ -5,6 +5,7 @@
 #include <cpu/gdt.h>
 #include <mm/pmm.h>
 #include <mm/vmm.h>
+#include <mm/heap.h>
 
 void _start(void)
 {
@@ -20,6 +21,8 @@ void _start(void)
     gdtInit(); // loads a new gdt
 
     vmmInit(); // create and load a page table
+
+    heapInit(); // initialise the heap
 
     serialWrites("RAM usage: ");
     serialWrites(to_string((pmmGetTotal() - pmmGetAvailable()) / 1024 / 1024));

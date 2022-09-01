@@ -7,11 +7,11 @@ extern void gdtLoad(gdtr_t *);
 gdtr_t gdtr;             // descriptor
 gdt_segment_t *segments; // pointer to the segments
 
-int lastSegment = 0;
+int gdtlastSegment = 0;
 void gdtCreateSegment(uint8_t access)
 {
-    gdt_segment_t *currentSegment = &segments[lastSegment++]; // get the address of the segment we will write
-    zero(currentSegment, gdt_segment_t);                      // clear the segment
+    gdt_segment_t *currentSegment = &segments[gdtlastSegment++]; // get the address of the segment we will write
+    zero(currentSegment, gdt_segment_t);                         // clear the segment
 
     currentSegment->access = access;
     currentSegment->flags_limit = 0b10100000; // 4 kb blocks, long-mode
@@ -30,8 +30,8 @@ void gdtInit()
     gdtCreateSegment(0b11110110); // user data
     gdtCreateSegment(0);          // null segment
 
-    gdtr.offset = (uint64_t)segments;                      // set the offset
-    gdtr.size = (lastSegment * sizeof(gdt_segment_t)) - 1; // set the size
+    gdtr.offset = (uint64_t)segments;                         // set the offset
+    gdtr.size = (gdtlastSegment * sizeof(gdt_segment_t)) - 1; // set the size
 
     gdtLoad(&gdtr); // load the gdt
 

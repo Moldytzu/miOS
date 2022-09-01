@@ -18,6 +18,7 @@
 #define alignD(val, alg) (align(val, alg) - alg)
 
 int strlen(const char *str);
+void memcpy(void *dest, void *src, size_t count);
 void memset(void *dest, uint8_t data, size_t count);
 const char *to_string(uint64_t val);
 const char *to_hstring(uint64_t val);

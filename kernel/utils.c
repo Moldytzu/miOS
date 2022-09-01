@@ -15,6 +15,14 @@ void memset(void *dest, uint8_t data, size_t count) // sets the contents of the 
         *(destPtr++) = data;
 }
 
+void memcpy(void *dest, void *src, size_t count) // copies the contents of an addres to another address
+{
+    uint8_t *destPtr = (uint8_t *)dest;
+    uint8_t *srcPtr = (uint8_t *)src;
+    for(; count; count--)
+        *(destPtr++) = *(srcPtr++);
+}
+
 // convert to a string (base 10)
 char to_stringout[32];
 const char *to_string(uint64_t val)
