@@ -9,6 +9,10 @@ static volatile struct limine_memmap_request memmap_request = {
     .id = LIMINE_MEMMAP_REQUEST,
     .revision = 0};
 
+static volatile struct limine_hhdm_request hhdm_request = {
+    .id = LIMINE_HHDM_REQUEST,
+    .revision = 0};
+
 // responses
 struct limine_terminal *terminal;
 
@@ -29,4 +33,9 @@ void limineWrite(const char *str)
 struct limine_memmap_response *limineGetMemmap()
 {
     return memmap_request.response;
+}
+
+uint64_t limineGetHHDM()
+{
+    return hhdm_request.response->offset;
 }

@@ -37,3 +37,8 @@ void gdtInit()
 
     serialWrites("Loaded the GDT!\n");
 }
+
+gdt_segment_t *gdtGetSegments()
+{
+    return segments;
+}

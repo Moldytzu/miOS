@@ -4,6 +4,7 @@
 #include <io/serial.h>
 #include <cpu/gdt.h>
 #include <mm/pmm.h>
+#include <mm/vmm.h>
 
 void _start(void)
 {
@@ -17,6 +18,8 @@ void _start(void)
     pmmInit(); // initialises the physical memory manager
 
     gdtInit(); // loads a new gdt
+
+    vmmInit(); // create and load a page table
 
     while (1)
         ;

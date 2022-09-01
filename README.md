@@ -12,7 +12,7 @@ This project depends on the cross-compiler built with the script from https://gi
 ##### [] Userspace:
     - set up basic serial communication [x]
     - set up a GDT [x]
-    - create a physical and virtual memory manager []
+    - create a physical and virtual memory manager [x]
     - create a heap []
     - set up a TSS []
     - set up an IDT []    

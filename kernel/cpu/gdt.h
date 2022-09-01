@@ -20,3 +20,4 @@ pstruct
 gdt_segment_t;
 
 void gdtInit();
+gdt_segment_t *gdtGetSegments();
