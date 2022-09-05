@@ -46,3 +46,4 @@ tss_t;
 
 void gdtInit();
 gdt_segment_t *gdtGetSegments();
+tss_t *gdtGetTSS();

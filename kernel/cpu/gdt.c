@@ -66,3 +66,8 @@ gdt_segment_t *gdtGetSegments()
 {
     return segments;
 }
+
+tss_t *gdtGetTSS()
+{
+    return tss;
+}

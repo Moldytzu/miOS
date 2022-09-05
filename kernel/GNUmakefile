@@ -14,7 +14,7 @@ LD := $(CROSS_COMPILER)ld
 ASM := nasm
 
 # User controllable CFLAGS.
-CFLAGS ?= -g
+CFLAGS ?= -O2 -g
 
 # User controllable LDFLAGS
 LDFLAGS ?=

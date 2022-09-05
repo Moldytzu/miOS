@@ -9,6 +9,11 @@
 #include <mm/vmm.h>
 #include <mm/heap.h>
 
+void idleTask(void)
+{
+    while (true);
+}
+
 void _start(void)
 {
     simdInit(); // initialise the simd instruction sets
@@ -29,6 +34,29 @@ void _start(void)
     serialWrites("/");
     serialWrites(to_string(pmmGetTotal() / 1024 / 1024));
     serialWrites(" MB\n");
+
+    // USERSPACE \/
+    
+    void *kernelIntStack = pmmAllocate();
+    void *userStack = pmmAllocate();
+    void *userspace = pmmAllocate();
+
+    // set the stacks in the gdt
+    tss_t *tss = gdtGetTSS();
+
+    tss->rsp[0] = (uint64_t)kernelIntStack + 4096;
+    tss->rsp[2] = (uint64_t)userStack + 4096;
+
+    // copy the idle task's contents in physical memory
+    memcpy(userspace, idleTask, 4096);
+
+    // map the task's contents as rw userspace
+    vmmMap(vmmGetBaseTable(), userspace, userspace, true, true);
+    
+    // map the user stack as rw userspace
+    vmmMap(vmmGetBaseTable(), userStack, userStack, true, true);
+
+    userspaceJump(userspace, userStack + 4096);
 
     while (1)
         ;
