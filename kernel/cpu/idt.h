@@ -44,5 +44,8 @@ pstruct
     uint64_t ss;
 } idt_intrerrupt_stack_t;
 
+extern void idtLoad(idtr_t *); 
+
 void idtSetGate(uint8_t vector, void *ptr);
 void idtInit();
+idtr_t *idtGetIDT();

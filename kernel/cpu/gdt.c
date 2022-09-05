@@ -2,8 +2,6 @@
 #include <io/serial.h>
 #include <mm/pmm.h>
 
-extern void gdtLoad(gdtr_t *);
-
 gdtr_t gdtr;             // descriptor
 gdt_segment_t *segments; // pointer to the segments
 tss_t *tss;              // pointer to the tss
@@ -70,4 +68,9 @@ gdt_segment_t *gdtGetSegments()
 tss_t *gdtGetTSS()
 {
     return tss;
+}
+
+gdtr_t *gdtGetGDT()
+{
+    return &gdtr;
 }

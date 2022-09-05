@@ -5,8 +5,6 @@
 idtr_t idtr;
 idt_gate_descriptor_t *descriptors;
 
-extern void idtLoad(idtr_t *); 
-
 void idtSetGate(uint8_t vector, void *ptr)
 {
     uint64_t base = (uint64_t)ptr;
@@ -38,4 +36,9 @@ void idtInit()
     idtr.size = sizeof(idt_gate_descriptor_t) * 256 - 1; // 256 descriptors
 
     idtLoad(&idtr);
+}
+
+idtr_t *idtGetIDT()
+{
+    return &idtr;
 }

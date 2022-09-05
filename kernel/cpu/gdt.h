@@ -44,6 +44,9 @@ pstruct
 }
 tss_t;
 
+extern void gdtLoad(gdtr_t *);
+
 void gdtInit();
 gdt_segment_t *gdtGetSegments();
+gdtr_t *gdtGetGDT();
 tss_t *gdtGetTSS();

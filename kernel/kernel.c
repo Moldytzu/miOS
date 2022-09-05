@@ -9,29 +9,9 @@
 #include <mm/vmm.h>
 #include <mm/heap.h>
 
-void _start(void)
+void cpuRun()
 {
-    simdInit(); // initialise the simd instruction sets
-
-    limineInit();        // initialise the bootloader interface wrapper
-    limineWrite("miOS"); // write text
-
-    serialInit(); // initialise the serial port interface
-    pmmInit();    // initialises the physical memory manager
-    gdtInit();    // loads a new gdt
-    idtInit();    // load an idt
-    vmmInit();    // create and load a page table
-    heapInit();   // initialise the heap
-    sysretInit(); // enable syscalls
-
-    serialWrites("RAM usage: ");
-    serialWrites(to_string((pmmGetTotal() - pmmGetAvailable()) / 1024 / 1024));
-    serialWrites("/");
-    serialWrites(to_string(pmmGetTotal() / 1024 / 1024));
-    serialWrites(" MB\n");
-
     // USERSPACE \/
-    
     void *kernelIntStack = pmmAllocate();
     void *userStack = pmmAllocate();
     void *userspace = pmmAllocate();
@@ -51,7 +31,46 @@ void _start(void)
     // map the user stack as rw userspace
     vmmMap(vmmGetBaseTable(), userStack, userStack, true, true);
 
+    // jump in userspace
     userspaceJump(userspace, userStack + 4096);
+}
+
+// used to set the same enviroment to all the cpus
+void cpuBootstrap()
+{
+    // todo: load the gdt
+
+    idtLoad(idtGetIDT()); // load the idt
+    vmmSwap(vmmGetBaseTable()); // swap the page table
+    sysretInit(); // enable syscalls
+
+    cpuRun(); // run the program
+}
+
+
+// kernel entry point
+void _start(void)
+{
+    simdInit(); // initialise the simd instruction sets
+
+    limineInit();        // initialise the bootloader interface wrapper
+    limineWrite("miOS"); // write text
+
+    serialInit(); // initialise the serial port interface
+    pmmInit();    // initialises the physical memory manager
+    gdtInit();    // loads a new gdt
+    idtInit();    // load an idt
+    vmmInit();    // create and load a page table
+    heapInit();   // initialise the heap
+
+    serialWrites("RAM usage: ");
+    serialWrites(to_string((pmmGetTotal() - pmmGetAvailable()) / 1024 / 1024));
+    serialWrites("/");
+    serialWrites(to_string(pmmGetTotal() / 1024 / 1024));
+    serialWrites(" MB\n");
+
+    // go run the cpu (todo: bootstrap all the cpus)
+    cpuBootstrap();
 
     while (1)
         ;
