@@ -21,7 +21,7 @@ void idtSetGate(uint8_t vector, void *ptr)
 
 extern void idtExceptionHandlerEntry();
 
-void idtExceptionHandler(void *rsp)
+void idtExceptionHandler(idt_intrerrupt_stack_t *rsp)
 {
     serialWrites("Generic exception handled");
 }
