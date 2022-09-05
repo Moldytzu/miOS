@@ -13,7 +13,7 @@
 #define iasm asm volatile
 #define ifunc __attribute__((always_inline)) inline static
 #define pstruct typedef struct __attribute__((packed))
-#define zero(ptr, type) memset(ptr, 0, sizeof(type))
+#define zero(ptr, type) memset((void *)(ptr), 0, sizeof(type))
 #define align(val, alg) (max(val,alg) + (alg - (max(val,alg) % alg)))
 #define alignD(val, alg) (align(val, alg) - alg)
 

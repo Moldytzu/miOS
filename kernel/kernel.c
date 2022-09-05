@@ -3,6 +3,7 @@
 #include <simd/simd.h>
 #include <io/serial.h>
 #include <cpu/gdt.h>
+#include <cpu/idt.h>
 #include <mm/pmm.h>
 #include <mm/vmm.h>
 #include <mm/heap.h>
@@ -19,6 +20,7 @@ void _start(void)
     pmmInit(); // initialises the physical memory manager
 
     gdtInit(); // loads a new gdt
+    idtInit(); // load an idt
 
     vmmInit(); // create and load a page table
 

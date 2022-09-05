@@ -44,7 +44,7 @@ void gdtInit()
     // clear the variables' contents
     memset(tss, 0, 4096);
     memset(segments, 0, 4096);
-    memset(&gdtr, 0, sizeof(gdtr_t));
+    zero(&gdtr, gdtr_t);
 
     gdtCreateSegment(0);          // null segment
     gdtCreateSegment(0b10011110); // kernel code
