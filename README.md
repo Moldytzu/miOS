@@ -9,7 +9,7 @@ This project depends on the cross-compiler built with the script from https://gi
     - configure Limine [x]
     - use the terminal to display some text [x]
     - enable simd [x]
-##### [] Userspace:
+##### [x] Userspace:
     - set up basic serial communication [x]
     - set up a GDT [x]
     - create a physical and virtual memory manager [x]
@@ -18,7 +18,7 @@ This project depends on the cross-compiler built with the script from https://gi
     - set up an IDT [x]    
     - set up sysret/syscall [x]
     - jump in userspace [x]
-    - create one test syscall []
+    - create one test syscall [x]
 ##### [] Multiprocessing:
     - set up the lapic intrerrupt controller and timer []
     - boot up the cores []

@@ -9,11 +9,6 @@
 #include <mm/vmm.h>
 #include <mm/heap.h>
 
-void idleTask(void)
-{
-    while (true);
-}
-
 void _start(void)
 {
     simdInit(); // initialise the simd instruction sets
@@ -41,7 +36,7 @@ void _start(void)
     void *userStack = pmmAllocate();
     void *userspace = pmmAllocate();
 
-    // set the stacks in the gdt
+    // set the stacks in the tss
     tss_t *tss = gdtGetTSS();
 
     tss->rsp[0] = (uint64_t)kernelIntStack + 4096;

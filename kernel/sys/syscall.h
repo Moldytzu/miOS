@@ -3,3 +3,4 @@
 
 extern void sysretInit();
 extern void userspaceJump(void *rip, void *rsp); 
+extern void idleTask();
