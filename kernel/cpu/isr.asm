@@ -40,8 +40,8 @@ bits 64
     pop r15
 %endmacro
 
-global idtExceptionHandlerEntry, idtLoad
-extern idtExceptionHandler
+global idtExceptionHandlerEntry, idtLoad, syscallHandlerEntry
+extern idtExceptionHandler, syscallHandler
 
 idtExceptionHandlerEntry:
     cli ; disable intrerrupts
@@ -51,6 +51,14 @@ idtExceptionHandlerEntry:
     POP_REG
     add rsp, 8 ; cancel the error code
     iretq
+
+syscallHandlerEntry:
+    cli
+    PUSH_REG
+    mov rdi, rsp ; give the handler the stack frame
+    call syscallHandler
+    POP_REG
+    o64 sysret
 
 idtLoad:
     lidt [rdi]

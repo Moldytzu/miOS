@@ -15,8 +15,8 @@ This project depends on the cross-compiler built with the script from https://gi
     - create a physical and virtual memory manager [x]
     - create a heap [x]
     - set up a TSS [x]
-    - set up an IDT []    
-    - set up sysret/syscall []
+    - set up an IDT [x]    
+    - set up sysret/syscall [x]
     - jump in userspace []
     - create one test syscall []
 ##### [] Multiprocessing:
