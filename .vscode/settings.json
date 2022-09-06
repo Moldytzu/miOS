@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "idt.h": "c",
-        "syscall.h": "c"
+        "syscall.h": "c",
+        "acpi.h": "c"
     }
 }

@@ -8,6 +8,7 @@
 #include <mm/pmm.h>
 #include <mm/vmm.h>
 #include <mm/heap.h>
+#include <acpi/acpi.h>
 
 void cpuRun()
 {
@@ -27,7 +28,7 @@ void cpuRun()
 
     // map the task's contents as rw userspace
     vmmMap(vmmGetBaseTable(), userspace, userspace, true, true);
-    
+
     // map the user stack as rw userspace
     vmmMap(vmmGetBaseTable(), userStack, userStack, true, true);
 
@@ -40,13 +41,12 @@ void cpuBootstrap()
 {
     // todo: load the gdt
 
-    idtLoad(idtGetIDT()); // load the idt
+    idtLoad(idtGetIDT());       // load the idt
     vmmSwap(vmmGetBaseTable()); // swap the page table
-    sysretInit(); // enable syscalls
+    sysretInit();               // enable syscalls
 
     cpuRun(); // run the program
 }
-
 
 // kernel entry point
 void _start(void)
@@ -62,6 +62,7 @@ void _start(void)
     idtInit();    // load an idt
     vmmInit();    // create and load a page table
     heapInit();   // initialise the heap
+    acpiInit();   // initialise the acpi interface
 
     serialWrites("RAM usage: ");
     serialWrites(to_string((pmmGetTotal() - pmmGetAvailable()) / 1024 / 1024));

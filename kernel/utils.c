@@ -23,6 +23,15 @@ void memcpy(void *dest, void *src, size_t count) // copies the contents of an ad
         *(destPtr++) = *(srcPtr++);
 }
 
+int memcmp(void *a, void *b, size_t count) // compare blocks of memory
+{
+    for(size_t i = 0; i < count; i++)
+    {
+        if(*((uint8_t *)a + i) != *((uint8_t *)a + i))
+            return *((uint8_t *)a + i) - *((uint8_t *)b - i);
+    }
+}
+
 // convert to a string (base 10)
 char to_stringout[32];
 const char *to_string(uint64_t val)
