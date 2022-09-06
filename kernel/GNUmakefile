@@ -33,6 +33,7 @@ INTERNALCFLAGS :=   		 \
 	-mno-red-zone        	 \
 	-mcmodel=kernel      	 \
 	-Werror 			     \
+	-Wall                    \
 	-Wno-int-to-pointer-cast \
 	-msse                    \
 	-msse2                   \

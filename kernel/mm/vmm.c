@@ -162,7 +162,6 @@ vmm_page_table_t *vmmCreateTable(bool full)
 
     struct limine_memmap_response *memMap = limineGetMemmap();
     uint64_t hhdm = limineGetHHDM();
-    uint64_t ksize = kfile_request.response->kernel_file->size;
     struct limine_kernel_address_response *kaddr = kaddr_request.response;
 
     // map the gdt as kernel rw

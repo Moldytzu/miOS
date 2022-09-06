@@ -25,11 +25,13 @@ void memcpy(void *dest, void *src, size_t count) // copies the contents of an ad
 
 int memcmp(void *a, void *b, size_t count) // compare blocks of memory
 {
-    for(size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < count; i++, a++, b++)
     {
-        if(*((uint8_t *)a + i) != *((uint8_t *)a + i))
-            return *((uint8_t *)a + i) - *((uint8_t *)b - i);
+        if (*(uint8_t *)a != *(uint8_t *)b)
+            return *(uint8_t *)a - *(uint8_t *)b;
     }
+
+    return 0;
 }
 
 // convert to a string (base 10)
